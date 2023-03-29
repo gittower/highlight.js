@@ -163,6 +163,7 @@ export default function(hljs) {
     "dispatch_once"
   ];
   const KEYWORDS = {
+    scope: 'keyword',
     "variable.language": [
       "this",
       "super"
@@ -191,7 +192,7 @@ export default function(hljs) {
       'obj-c++',
       'objective-c++'
     ],
-    keywords: KEYWORDS,
+    // keywords: KEYWORDS,
     illegal: '</',
     contains: [
       API_CLASS,
@@ -241,6 +242,17 @@ export default function(hljs) {
         excludeEnd: true,
         keywords: CLASS_KEYWORDS,
         contains: [ hljs.UNDERSCORE_TITLE_MODE ]
+      },
+      /* Identifiers (Including Keywords) */
+      {
+        scope: 'symbol',
+        match: IDENTIFIER_RE,
+        keywords: KWS
+        // contains: [
+        //   KEYWORDS,
+        //   CLASS_KEYWORDS
+        // ]
+        // match: '\\b?!(@property)\\b'
       },
       {
         begin: '\\.' + hljs.UNDERSCORE_IDENT_RE,
