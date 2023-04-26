@@ -191,6 +191,7 @@ export default function(hljs) {
       'obj-c++',
       'objective-c++'
     ],
+    keywords: KEYWORDS,
     illegal: '</',
     contains: [
       API_CLASS,
@@ -241,13 +242,12 @@ export default function(hljs) {
         keywords: CLASS_KEYWORDS,
         contains: [ hljs.UNDERSCORE_TITLE_MODE ]
       },
-      /* Treat keywords as a special case of identifiers. */
       {
+        /* non-keyword identifiers */
         scope: 'symbol',
-        begin: /[a-zA-Z@]/,
+        begin: '\\b(?!(' + (KWS.concat(CLASS_KEYWORDS.keyword)).join('|') + ')\\b)[a-zA-Z@][^a-zA-Z0-9_]*',
         end: /[^a-zA-Z0-9_]/,
-        excludeEnd: true,
-        keywords: KEYWORDS
+        excludeEnd: true
       },
       {
         begin: '\\.' + hljs.UNDERSCORE_IDENT_RE,
