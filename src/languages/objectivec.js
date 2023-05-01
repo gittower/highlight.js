@@ -11,7 +11,7 @@ export default function(hljs) {
     className: 'built_in',
     begin: '\\b(AV|CA|CF|CG|CI|CL|CM|CN|CT|MK|MP|MTK|MTL|NS|SCN|SK|UI|WK|XC)\\w+'
   };
-  const IDENTIFIER_RE = /[a-zA-Z@][a-zA-Z0-9_]*/;
+  const IDENTIFIER_RE = /[a-zA-Z@_][a-zA-Z0-9_]*/;
   const TYPES = [
     "int",
     "float",
@@ -245,7 +245,7 @@ export default function(hljs) {
       {
         /* non-keyword identifiers */
         scope: 'symbol',
-        begin: '\\b(?!(' + (KWS.concat(CLASS_KEYWORDS.keyword)).join('|') + ')\\b)[a-zA-Z@][^a-zA-Z0-9_]*',
+        begin: '\\b(?!(' + (KWS.concat(CLASS_KEYWORDS.keyword)).join('|') + ')\\b)[a-zA-Z@_][^a-zA-Z0-9_]*',
         end: /[^a-zA-Z0-9_]/,
         excludeEnd: true
       },
