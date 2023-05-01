@@ -247,10 +247,7 @@ export default function(hljs) {
         scope: 'symbol',
         begin: '\\b(?!(' + (KWS.concat(CLASS_KEYWORDS.keyword)).join('|') + ')\\b)[a-zA-Z@_][^a-zA-Z0-9_]*',
         end: /[^a-zA-Z0-9_]/,
-        excludeEnd: true
-      },
-      {
-        begin: '\\.' + hljs.UNDERSCORE_IDENT_RE,
+        excludeEnd: true,
         relevance: 0
       }
     ]
