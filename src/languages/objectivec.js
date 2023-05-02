@@ -12,6 +12,55 @@ export default function(hljs) {
     begin: '\\b(AV|CA|CF|CG|CI|CL|CM|CN|CT|MK|MP|MTK|MTL|NS|SCN|SK|UI|WK|XC)\\w+'
   };
   const IDENTIFIER_RE = /[a-zA-Z@_][a-zA-Z0-9_]*/;
+  const OPERATORS = [
+    "\\.",
+    "->",
+    "!=",
+    "!",
+    "==",
+    "=",
+    "\\+\\+",
+    "\\+=",
+    "\\+",
+    "\\-\\-",
+    "\\-=",
+    "\\-",
+    "\\*=",
+    "\\*",
+    "/=",
+    "/",
+    "%=",
+    "%",
+    "\\^=",
+    "\\^",
+    "\\|\\|",
+    "\\|=",
+    "\\|",
+    "~",
+    "&&",
+    "&=",
+    "&",
+    "\\?",
+    ":",
+    "\\<\\<=",
+    "\\<\\<",
+    "\\<",
+    "\\>\\>=",
+    "\\>\\>",
+    "\\>",
+  ];
+  const PUNCTUATION = [
+    ";",
+    "@{",
+    "{",
+    "}",
+    "\\,",
+    "\\(",
+    "\\)",
+    "@\\[",
+    "\\[",
+    "\\]",
+  ];
   const TYPES = [
     "int",
     "float",
@@ -174,7 +223,7 @@ export default function(hljs) {
     type: TYPES
   };
   const CLASS_KEYWORDS = {
-    $pattern: IDENTIFIER_RE,
+    $pattern: /@[a-z]+\b/,
     keyword: [
       "@interface",
       "@class",
@@ -237,7 +286,7 @@ export default function(hljs) {
       {
         className: 'class',
         begin: '(' + CLASS_KEYWORDS.keyword.join('|') + ')\\b',
-        end: /(\{|$)/,
+        end: /(\(|\{|$)/,
         excludeEnd: true,
         keywords: CLASS_KEYWORDS,
         contains: [ hljs.UNDERSCORE_TITLE_MODE ]
@@ -248,6 +297,16 @@ export default function(hljs) {
         begin: '\\b(?!(' + (KWS.concat(CLASS_KEYWORDS.keyword)).join('|') + ')\\b)[a-zA-Z@_][^a-zA-Z0-9_]*',
         end: /[^a-zA-Z0-9_]/,
         excludeEnd: true,
+        relevance: 0
+      },
+      {
+        scope: 'operator',
+        begin: '(' + OPERATORS.join('|') + ')',
+        relevance: 0
+      },
+      {
+        scope: 'punctuation',
+        begin: '(' + PUNCTUATION.join('|') + ')',
         relevance: 0
       }
     ]
