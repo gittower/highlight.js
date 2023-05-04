@@ -11,7 +11,9 @@ export default function(hljs) {
     className: 'built_in',
     begin: '\\b(AV|CA|CF|CG|CI|CL|CM|CN|CT|MK|MP|MTK|MTL|NS|SCN|SK|UI|WK|XC)\\w+'
   };
-  const IDENTIFIER_RE = /[a-zA-Z@_][a-zA-Z0-9_]*/;
+  const IDENTIFIER_RE = /[a-zA-Z_][a-zA-Z0-9_]*/;
+  const AT_KEYWORD_RE = /@[a-zA-Z_][a-zA-Z0-9_]*/;
+  const KEYWORD_RE = IDENTIFIER_RE;
   const OPERATORS = [
     "\\.",
     "->",
@@ -130,26 +132,6 @@ export default function(hljs) {
     "__weak",
     "__block",
     "__autoreleasing",
-    "@private",
-    "@protected",
-    "@public",
-    "@try",
-    "@property",
-    "@end",
-    "@throw",
-    "@catch",
-    "@finally",
-    "@autoreleasepool",
-    "@synthesize",
-    "@dynamic",
-    "@selector",
-    "@optional",
-    "@required",
-    "@encode",
-    "@package",
-    "@import",
-    "@defs",
-    "@compatibility_alias",
     "__bridge",
     "__bridge_transfer",
     "__bridge_retained",
@@ -194,6 +176,32 @@ export default function(hljs) {
     "NS_VALUERETURN",
     "NS_VOIDRETURN"
   ];
+  const AT_KWS = [
+    "@autoreleasepool",
+    "@catch",
+    "@class",
+    "@compatibility_alias",
+    "@defs",
+    "@dynamic",
+    "@encode",
+    "@end",
+    "@finally",
+    "@implementation",
+    "@import",
+    "@interface",
+    "@optional",
+    "@package",
+    "@private",
+    "@property",
+    "@protected",
+    "@protocol",
+    "@public",
+    "@required",
+    "@selector",
+    "@synthesize",
+    "@throw",
+    "@try"
+  ];
   const LITERALS = [
     "false",
     "true",
@@ -216,14 +224,14 @@ export default function(hljs) {
       "this",
       "super"
     ],
-    $pattern: IDENTIFIER_RE,
+    $pattern: KEYWORD_RE,
     keyword: KWS,
     literal: LITERALS,
     built_in: BUILT_INS,
     type: TYPES
   };
   const CLASS_KEYWORDS = {
-    $pattern: /@[a-z]+\b/,
+    $pattern: AT_KEYWORD_RE,
     keyword: [
       "@interface",
       "@class",
@@ -290,6 +298,11 @@ export default function(hljs) {
         excludeEnd: true,
         keywords: CLASS_KEYWORDS,
         contains: [ hljs.UNDERSCORE_TITLE_MODE ]
+      },
+      {
+        scope: 'keyword',
+        $pattern: AT_KEYWORD_RE,
+        begin: '(' + AT_KWS.join('|') + ')\\b',
       },
       {
         /* non-keyword identifiers */
