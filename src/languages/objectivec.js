@@ -1,7 +1,7 @@
 /*
 Language: Objective-C
 Author: Valerii Hiora <valerii.hiora@gmail.com>
-Contributors: Angel G. Olloqui <angelgarcia.mail@gmail.com>, Matt Diephouse <matt@diephouse.com>, Andrew Farmer <ahfarmer@gmail.com>, Minh Nguyễn <mxn@1ec5.org>
+Contributors: Angel G. Olloqui <angelgarcia.mail@gmail.com>, Matt Diephouse <matt@diephouse.com>, Andrew Farmer <ahfarmer@gmail.com>, Minh Nguyễn <mxn@1ec5.org>, Troy Stephens <troy@coherencelabs.com>
 Website: https://developer.apple.com/documentation/objectivec
 Category: common
 */
@@ -272,9 +272,10 @@ export default function(hljs) {
         className: 'meta',
         begin: /#\s*[a-z]+\b/,
         end: /$/,
-        keywords: { keyword:
-            'if else elif endif define undef warning error line '
-            + 'pragma ifdef ifndef include' },
+        // Preprocessor directive syntax coloring looks better when we don't highlight keywords.
+        // keywords: { keyword:
+        //     'if else elif endif define undef warning error line '
+        //     + 'pragma ifdef ifndef include' },
         contains: [
           {
             begin: /\\\n/,
