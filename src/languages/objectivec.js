@@ -307,7 +307,7 @@ export default function(hljs) {
       {
         /* non-keyword identifiers */
         scope: 'symbol',
-        begin: '\\b(?!(' + (KWS.concat(CLASS_KEYWORDS.keyword)).join('|') + '))[a-zA-Z@_][a-zA-Z0-9_]*',
+        begin: '\\b(?!(' + (KWS.concat(CLASS_KEYWORDS.keyword)).join('|') + ')\\b)[a-zA-Z@_][a-zA-Z0-9_]*',
         relevance: 0
       },
       {
