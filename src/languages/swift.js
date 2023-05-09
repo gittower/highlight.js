@@ -2,7 +2,7 @@
 Language: Swift
 Description: Swift is a general-purpose programming language built using a modern approach to safety, performance, and software design patterns.
 Author: Steven Van Impe <steven.vanimpe@icloud.com>
-Contributors: Chris Eidhof <chris@eidhof.nl>, Nate Cook <natecook@gmail.com>, Alexander Lichter <manniL@gmx.net>, Richard Gibson <gibson042@github>
+Contributors: Chris Eidhof <chris@eidhof.nl>, Nate Cook <natecook@gmail.com>, Alexander Lichter <manniL@gmx.net>, Richard Gibson <gibson042@github>, Troy Stephens <troy@coherencelabs.com>
 Website: https://swift.org
 Category: common, system
 */
@@ -40,11 +40,6 @@ export default function(hljs) {
     ],
     className: { 2: "keyword" }
   };
-  const KEYWORD_GUARD = {
-    // Consume .keyword to prevent highlighting properties and methods as keywords.
-    match: concat(/\./, either(...Swift.keywords)),
-    relevance: 0
-  };
   const PLAIN_KEYWORDS = Swift.keywords
     .filter(kw => typeof kw === 'string')
     .concat([ "_|0" ]); // seems common, so 0 relevance
@@ -70,7 +65,6 @@ export default function(hljs) {
   };
   const KEYWORD_MODES = [
     DOT_KEYWORD,
-    KEYWORD_GUARD,
     KEYWORD
   ];
 
@@ -190,6 +184,11 @@ export default function(hljs) {
     className: 'variable',
     match: `\\$${Swift.identifierCharacter}+`
   };
+  const NON_KEYWORD_IDENTIFIER = {
+    className: 'symbol',
+    match: '\\b(?!' + either(...Swift.keywords) + '\\b)' + Swift.identifier,
+    relevance: 0
+  };
   const IDENTIFIERS = [
     QUOTED_IDENTIFIER,
     IMPLICIT_PARAMETER,
@@ -270,18 +269,17 @@ export default function(hljs) {
   TYPE.contains.push(GENERIC_ARGUMENTS);
 
   // https://docs.swift.org/swift-book/ReferenceManual/Expressions.html#ID552
-  // Prevents element names from being highlighted as keywords.
   const TUPLE_ELEMENT_NAME = {
-    match: concat(Swift.identifier, /\s*:/),
+    className: 'params',
+    match: concat(NON_KEYWORD_IDENTIFIER.match, /\s*:/),
     keywords: "_|0",
     relevance: 0
   };
-  // Matches tuples as well as the parameter list of a function type.
+  // Matches tuples as well as the actual parameter list of a function call.
   const TUPLE = {
     begin: /\(/,
     end: /\)/,
     relevance: 0,
-    keywords: KEYWORDS,
     contains: [
       'self',
       TUPLE_ELEMENT_NAME,
@@ -293,7 +291,8 @@ export default function(hljs) {
       STRING,
       ...IDENTIFIERS,
       ...ATTRIBUTES,
-      TYPE
+      TYPE,
+      NON_KEYWORD_IDENTIFIER
     ]
   };
 
@@ -323,6 +322,7 @@ export default function(hljs) {
       }
     ]
   };
+  // Matches the formal parameter list of a function declaration.
   const FUNCTION_PARAMETERS = {
     begin: /\(/,
     end: /\)/,
@@ -472,7 +472,8 @@ export default function(hljs) {
       ...IDENTIFIERS,
       ...ATTRIBUTES,
       TYPE,
-      TUPLE
+      TUPLE,
+      NON_KEYWORD_IDENTIFIER
     ]
   };
 }
