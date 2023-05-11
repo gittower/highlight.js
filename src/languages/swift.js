@@ -105,12 +105,6 @@ export default function(hljs) {
     OPERATOR_GUARD,
     OPERATOR
   ];
-  
-  const PUNCTUATION = {
-    className: 'punctuation',
-    match: /(\.|,|\:|\?|\(|\)|\{|\})/,
-    relevance: 0
-  };
 
   // https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#grammar_numeric-literal
   // TODO: Update for leading `-` after lookbehind is supported everywhere
@@ -293,7 +287,11 @@ export default function(hljs) {
       ...KEYWORD_MODES,
       ...BUILT_INS,
       ...OPERATORS,
-      PUNCTUATION,
+      {
+        className: 'punctuation',
+        match: /(\.|,|\:|\?)/,
+        relevance: 0
+      },
       NUMBER,
       STRING,
       ...IDENTIFIERS,
@@ -316,7 +314,8 @@ export default function(hljs) {
       lookahead(concat(Swift.identifier, /\s*:/)),
       lookahead(concat(Swift.identifier, /\s+/, Swift.identifier, /\s*:/))
     ),
-    end: /:/,
+    end: lookahead(/:/),
+    excludeEnd: true,
     relevance: 0,
     contains: [
       {
@@ -331,15 +330,19 @@ export default function(hljs) {
   };
   // Matches the formal parameter list of a function declaration.
   const FUNCTION_PARAMETERS = {
-    begin: /\(/,
-    end: /\)/,
+    begin: lookahead(/\(/),
+    end: lookahead(/\)/),
     keywords: KEYWORDS,
     contains: [
       FUNCTION_PARAMETER_NAME,
       ...COMMENTS,
       ...KEYWORD_MODES,
       ...OPERATORS,
-      PUNCTUATION,
+      {
+        className: 'punctuation',
+        match: /(\.|,|\:|\?|\()/,
+        relevance: 0
+      },
       NUMBER,
       STRING,
       ...ATTRIBUTES,
@@ -427,7 +430,6 @@ export default function(hljs) {
       ...KEYWORD_MODES,
       ...BUILT_INS,
       ...OPERATORS,
-      PUNCTUATION,
       NUMBER,
       STRING,
       ...IDENTIFIERS
@@ -454,7 +456,7 @@ export default function(hljs) {
       INIT_SUBSCRIPT,
       {
         beginKeywords: 'struct protocol class extension enum actor',
-        end: '\\{',
+        end: lookahead(/(->|\{)/),
         excludeEnd: true,
         keywords: KEYWORDS,
         contains: [
@@ -481,7 +483,11 @@ export default function(hljs) {
       ...KEYWORD_MODES,
       ...BUILT_INS,
       ...OPERATORS,
-      PUNCTUATION,
+      {
+        className: 'punctuation',
+        match: /(\.|,|\:|\?|\(|\)|\{|\}|\[|\])/,
+        relevance: 0
+      },
       NUMBER,
       STRING,
       ...IDENTIFIERS,
