@@ -105,6 +105,12 @@ export default function(hljs) {
     OPERATOR_GUARD,
     OPERATOR
   ];
+  
+  const PUNCTUATION = {
+    className: 'punctuation',
+    match: /(\.|,|\:|\?|\(|\)|\{|\})/,
+    relevance: 0
+  };
 
   // https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#grammar_numeric-literal
   // TODO: Update for leading `-` after lookbehind is supported everywhere
@@ -287,6 +293,7 @@ export default function(hljs) {
       ...KEYWORD_MODES,
       ...BUILT_INS,
       ...OPERATORS,
+      PUNCTUATION,
       NUMBER,
       STRING,
       ...IDENTIFIERS,
@@ -332,6 +339,7 @@ export default function(hljs) {
       ...COMMENTS,
       ...KEYWORD_MODES,
       ...OPERATORS,
+      PUNCTUATION,
       NUMBER,
       STRING,
       ...ATTRIBUTES,
@@ -419,6 +427,7 @@ export default function(hljs) {
       ...KEYWORD_MODES,
       ...BUILT_INS,
       ...OPERATORS,
+      PUNCTUATION,
       NUMBER,
       STRING,
       ...IDENTIFIERS
@@ -453,12 +462,17 @@ export default function(hljs) {
             className: "title.class",
             begin: /[A-Za-z$_][\u00C0-\u02B80-9A-Za-z$_]*/
           }),
-          ...KEYWORD_MODES
+          ...KEYWORD_MODES,
+          {
+            className: 'punctuation',
+            match: /(\:|,)/
+          }
         ]
       },
       OPERATOR_DECLARATION,
       PRECEDENCEGROUP,
       {
+        className: 'meta',
         beginKeywords: 'import',
         end: /$/,
         contains: [ ...COMMENTS ],
@@ -467,6 +481,7 @@ export default function(hljs) {
       ...KEYWORD_MODES,
       ...BUILT_INS,
       ...OPERATORS,
+      PUNCTUATION,
       NUMBER,
       STRING,
       ...IDENTIFIERS,
