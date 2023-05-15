@@ -52,7 +52,7 @@ export default function(hljs) {
         relevance: 0,
         contains: [
           {
-            className: 'string',
+            className: 'attrvalue',
             endsParent: true,
             variants: [
               {
