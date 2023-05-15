@@ -68,9 +68,10 @@ export default function(hljs) {
     className: 'meta',
     begin: /#\s*[a-z]+\b/,
     end: /$/,
-    keywords: { keyword:
-        'if else elif endif define undef warning error line '
-        + 'pragma _Pragma ifdef ifndef include' },
+    // Preprocessor directive syntax coloring looks better when we don't highlight keywords.
+    // keywords: { keyword:
+    //     'if else elif endif define undef warning error line '
+    //     + 'pragma _Pragma ifdef ifndef include' },
     contains: [
       {
         begin: /\\\n/,
@@ -177,14 +178,83 @@ export default function(hljs) {
       + 'strcpy strcspn strlen strncat strncmp strncpy strpbrk strrchr strspn strstr tanh tan '
       + 'vfprintf vprintf vsprintf endl initializer_list unique_ptr',
   };
+  
+  const NON_KEYWORD_IDENTIFIER = {
+    scope: 'symbol',
+    begin: '\\b(?!(' + C_KEYWORDS.join('|') + ')\\b)[a-zA-Z_][a-zA-Z0-9_]*',
+    relevance: 0
+  };
 
+  const C_OPERATORS = [
+    "->",
+    "!=",
+    "!",
+    "==",
+    "=",
+    "\\+\\+",
+    "\\+=",
+    "\\+",
+    "\\-\\-",
+    "\\-=",
+    "\\-",
+    "\\*=",
+    "\\*",
+    "/=",
+    "/",
+    "%=",
+    "%",
+    "\\^=",
+    "\\^",
+    "\\|\\|",
+    "\\|=",
+    "\\|",
+    "~",
+    "&&",
+    "&=",
+    "&",
+    "\\?",
+    ":",
+    "\\<\\<=",
+    "\\<\\<",
+    "\\<",
+    "\\>\\>=",
+    "\\>\\>",
+    "\\>",
+  ];
+  
+  const OPERATORS = {
+    scope: 'operator',
+    begin: '(' + C_OPERATORS.join('|') + ')',
+    relevance: 0
+  };
+
+  const C_PUNCTUATION = [
+    "\\;",
+    "\\,",
+    "{",
+    "}",
+    "\\(",
+    "\\)",
+    "\\[",
+    "\\]",
+  ];
+
+  const PUNCTUATION = {
+    scope: 'punctuation',
+    begin: '(' + C_PUNCTUATION.join('|') + ')',
+    relevance: 0
+  };
+  
   const EXPRESSION_CONTAINS = [
     PREPROCESSOR,
     TYPES,
     C_LINE_COMMENT_MODE,
     hljs.C_BLOCK_COMMENT_MODE,
     NUMBERS,
-    STRINGS
+    STRINGS,
+    NON_KEYWORD_IDENTIFIER,
+    OPERATORS,
+    PUNCTUATION
   ];
 
   const EXPRESSION_CONTEXT = {
@@ -255,6 +325,9 @@ export default function(hljs) {
           STRINGS,
           NUMBERS,
           TYPES,
+          NON_KEYWORD_IDENTIFIER,
+          OPERATORS,
+          PUNCTUATION,
           // Count matching parentheses.
           {
             begin: /\(/,
@@ -267,12 +340,18 @@ export default function(hljs) {
               hljs.C_BLOCK_COMMENT_MODE,
               STRINGS,
               NUMBERS,
-              TYPES
+              TYPES,
+              NON_KEYWORD_IDENTIFIER,
+              OPERATORS,
+              PUNCTUATION
             ]
           }
         ]
       },
       TYPES,
+      NON_KEYWORD_IDENTIFIER,
+      OPERATORS,
+      PUNCTUATION,
       C_LINE_COMMENT_MODE,
       hljs.C_BLOCK_COMMENT_MODE,
       PREPROCESSOR
@@ -291,6 +370,8 @@ export default function(hljs) {
       EXPRESSION_CONTEXT,
       FUNCTION_DECLARATION,
       EXPRESSION_CONTAINS,
+      OPERATORS,
+      PUNCTUATION,
       [
         PREPROCESSOR,
         {
