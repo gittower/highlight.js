@@ -2,6 +2,7 @@
 Language: Markdown
 Requires: xml.js
 Author: John Crepezzi <john.crepezzi@gmail.com>
+Contributors: Troy Stephens <troy@coherencelabs.com>
 Website: https://daringfireball.net/projects/markdown/
 Category: common, markup
 */
@@ -19,7 +20,7 @@ export default function(hljs) {
     end: '$'
   };
   const CODE = {
-    className: 'code',
+    scope: 'code',
     variants: [
       // TODO: fix to allow these to work with sublanguage also
       { begin: '(`{3,})[^`](.|\\n)*?\\1`*[ ]*' },
@@ -49,29 +50,26 @@ export default function(hljs) {
     ]
   };
   const LIST = {
-    className: 'bullet',
+    scope: 'bullet',
     begin: '^[ \t]*([*+-]|(\\d+\\.))(?=\\s+)',
     end: '\\s+',
     excludeEnd: true
   };
+  // [id]: URL "Optional Title Here"
   const LINK_REFERENCE = {
-    begin: /^\[[^\n]+\]:/,
-    returnBegin: true,
-    contains: [
-      {
-        className: 'symbol',
-        begin: /\[/,
-        end: /\]/,
-        excludeBegin: true,
-        excludeEnd: true
-      },
-      {
-        className: 'link',
-        begin: /:\s*/,
-        end: /$/,
-        excludeBegin: true
-      }
-    ]
+    begin: [
+      /^ {0,3}\[/,
+      /[^\]]+/,
+      /\]:\s+/,
+      /[^\s]+/,
+    ],
+    beginScope: {
+      1: 'delimiter',
+      2: 'symbol',
+      3: 'delimiter',
+      4: 'link',
+    },
+    relevance: 0
   };
   const URL_SCHEME = /[A-Za-z][A-Za-z0-9+.-]*/;
   const LINK = {
@@ -105,36 +103,49 @@ export default function(hljs) {
     returnBegin: true,
     contains: [
       {
-        // empty strings for alt or link text
-        match: /\[(?=\])/ },
-      {
-        className: 'string',
-        relevance: 0,
-        begin: '\\[',
-        end: '\\]',
-        excludeBegin: true,
-        returnEnd: true
+        // []
+        scope: 'delimiter',
+        match: /\[(?=\])/,
+        relevance: 0
       },
       {
-        className: 'link',
-        relevance: 0,
-        begin: '\\]\\(',
-        end: '\\)',
-        excludeBegin: true,
-        excludeEnd: true
+        // [text](url)
+        begin: [
+          /\[/,
+          /[^\]]*/,
+          /\]\(/,
+          /[^\)]*/,
+          /\)/
+        ],
+        beginScope: {
+          1: 'delimiter',
+          3: 'delimiter',
+          4: 'link',
+          5: 'delimiter'
+        },
+        relevance: 0
       },
       {
-        className: 'symbol',
-        relevance: 0,
-        begin: '\\]\\[',
-        end: '\\]',
-        excludeBegin: true,
-        excludeEnd: true
-      }
+        // [text][id]
+        begin: [
+          /\[/,
+          /[^\]]*/,
+          /\]\s*\[/,
+          /[^\]]*/,
+          /\]/
+        ],
+        beginScope: {
+          1: 'delimiter',
+          3: 'delimiter',
+          4: 'symbol',
+          5: 'delimiter'
+        },
+        relevance: 0
+      },
     ]
   };
   const BOLD = {
-    className: 'strong',
+    scope: 'strong',
     contains: [], // defined later
     variants: [
       {
@@ -148,7 +159,7 @@ export default function(hljs) {
     ]
   };
   const ITALIC = {
-    className: 'emphasis',
+    scope: 'emphasis',
     contains: [], // defined later
     variants: [
       {
@@ -188,7 +199,7 @@ export default function(hljs) {
   CONTAINABLE = CONTAINABLE.concat(BOLD, ITALIC);
 
   const HEADER = {
-    className: 'section',
+    scope: 'section',
     variants: [
       {
         begin: '^#{1,6}',
@@ -210,7 +221,7 @@ export default function(hljs) {
   };
 
   const BLOCKQUOTE = {
-    className: 'quote',
+    scope: 'quote',
     begin: '^>\\s+',
     contains: CONTAINABLE,
     end: '$'
