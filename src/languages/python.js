@@ -152,6 +152,12 @@ export default function(hljs) {
     literal: LITERALS,
     type: TYPES
   };
+  
+  const NON_KEYWORD_IDENTIFIER = {
+    scope: 'symbol',
+    begin: '\\b(?!(' + (RESERVED_WORDS.concat(BUILT_INS).concat(LITERALS).concat(TYPES)).join('|') + ')\\b)[A-Za-z_][A-Za-z0-9_]*',
+    relevance: 0
+  };
 
   const PROMPT = {
     className: 'meta',
@@ -426,7 +432,8 @@ export default function(hljs) {
           PARAMS,
           STRING
         ]
-      }
+      },
+      NON_KEYWORD_IDENTIFIER
     ]
   };
 }
