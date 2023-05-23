@@ -159,6 +159,72 @@ export default function(hljs) {
     relevance: 0
   };
 
+  // https://docs.python.org/3/reference/lexical_analysis.html#operators
+  const PYTHON_OPERATORS = [
+    "\\+",
+    "-",
+    "\\*\\*",
+    "\\*",
+    "//",
+    "/",
+    "%",
+    "@",
+    "<<",
+    "<=",
+    "<",
+    ">>",
+    ">=",
+    ">",
+    "&",
+    "\\|",
+    "\\^",
+    "~",
+    ":=",
+    "==",
+    "!="
+  ];
+  
+  const OPERATORS = {
+    scope: 'operator',
+    begin: '(' + PYTHON_OPERATORS.join('|') + ')',
+    relevance: 0
+  };
+  
+  // https://docs.python.org/3/reference/lexical_analysis.html#delimiters
+  const PYTHON_DELIMITERS = [
+    "\\(",
+    "\\)",
+    "\\[",
+    "\\]",
+    "\\{",
+    "\\}",
+    ",",
+    ":",
+    "\\.",
+    ";",
+    "=",
+    "->",
+    "\\+=",
+    "-=",
+    "\\*=",
+    "/=",
+    "//=",
+    "%=",
+    "@=",
+    "&=",
+    "\\|=",
+    "\\^=",
+    ">>=",
+    "<<=",
+    "\\*\\*="
+  ];
+
+  const DELIMITERS = {
+    scope: 'punctuation',
+    begin: '(' + PYTHON_DELIMITERS.join('|') + ')',
+    relevance: 0
+  };
+  
   const PROMPT = {
     className: 'meta',
     begin: /^(>>>|\.\.\.) /
@@ -343,13 +409,19 @@ export default function(hljs) {
         skip: true
       },
       {
-        begin: /\(/,
-        end: /\)/,
-        excludeBegin: true,
-        excludeEnd: true,
+        begin: /(?=\()/,
+        end: /(?=\))/,
         keywords: KEYWORDS,
         contains: [
-          'self',
+          {
+            scope: "punctuation",
+            match: /\(/
+          },
+          {
+            scope: "punctuation",
+            match: /\)/,
+            endsParent: true
+          },
           PROMPT,
           NUMBER,
           STRING,
@@ -433,6 +505,8 @@ export default function(hljs) {
           STRING
         ]
       },
+      OPERATORS,
+      DELIMITERS,
       NON_KEYWORD_IDENTIFIER
     ]
   };
