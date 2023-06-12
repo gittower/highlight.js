@@ -102,7 +102,7 @@ export default function(hljs) {
     ]
   };
   const OPERATORS = [
-    OPERATOR_GUARD,
+    // OPERATOR_GUARD,
     OPERATOR
   ];
 
@@ -270,8 +270,14 @@ export default function(hljs) {
 
   // https://docs.swift.org/swift-book/ReferenceManual/Expressions.html#ID552
   const TUPLE_ELEMENT_NAME = {
-    className: 'params',
-    match: concat(NON_KEYWORD_IDENTIFIER.match, /\s*:/),
+    match: [
+      NON_KEYWORD_IDENTIFIER.match,
+      /\s*:/
+    ],
+    className: {
+      1: 'title.function',
+      2: 'punctuation'
+    },
     keywords: "_|0",
     relevance: 0
   };
@@ -351,14 +357,15 @@ export default function(hljs) {
       ...OPERATORS,
       {
         className: 'punctuation',
-        match: /(\.|,|\:|\?|\()/,
+        match: /(\.|,|\:|\?|!|\[|\]|\()/,
         relevance: 0
       },
       NUMBER,
       STRING,
       ...ATTRIBUTES,
       TYPE,
-      TUPLE
+      TUPLE,
+      NON_KEYWORD_IDENTIFIER
     ],
     endsParent: true,
     illegal: /["']/
@@ -384,6 +391,23 @@ export default function(hljs) {
       /%/
     ]
   };
+  const FUNCTION_CALL = {
+    match: [
+      either(QUOTED_IDENTIFIER.match, Swift.identifier, Swift.operator),
+      /[?]?/,
+      lookahead(/\(/)
+    ],
+    className: {
+      1: 'title.function',
+      2: 'punctuation'
+    },
+    contains: [
+      GENERIC_PARAMETERS,
+      FUNCTION_PARAMETERS,
+      WHITESPACE
+    ],
+    illegal: /\[|%/
+  };
 
   // https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#ID375
   // https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#ID379
@@ -392,7 +416,7 @@ export default function(hljs) {
       /\b(?:subscript|init[?!]?)/,
       /\s*(?=[<(])/,
     ],
-    className: { 1: "keyword" },
+    className: { 1: "title.function" },
     contains: [
       GENERIC_PARAMETERS,
       FUNCTION_PARAMETERS,
@@ -464,6 +488,7 @@ export default function(hljs) {
     contains: [
       ...COMMENTS,
       FUNCTION,
+      FUNCTION_CALL,
       INIT_SUBSCRIPT,
       {
         beginKeywords: 'struct protocol class extension enum actor',
