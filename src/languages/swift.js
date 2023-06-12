@@ -319,12 +319,23 @@ export default function(hljs) {
     relevance: 0,
     contains: [
       {
-        className: 'keyword',
-        match: /\b_\b/
+        match: [
+          Swift.identifier,
+          /\s+/,
+          Swift.identifier
+        ],
+        className: {
+          1: 'title.function',
+          3: 'params'
+        }
       },
       {
-        className: 'params',
-        match: Swift.identifier
+        match: /\b_\b/,
+        className: 'keyword'
+      },
+      {
+        match: Swift.identifier,
+        className: 'title.function'
       }
     ]
   };
