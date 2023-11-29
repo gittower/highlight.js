@@ -14,7 +14,7 @@ export default function(hljs) {
     relevance: 0,
     begin: regex.concat(
       /\b/,
-      /(?!let\b)/,
+      /(?!let|for|while|if|else|match\b)/,
       hljs.IDENT_RE,
       regex.lookahead(/\s*\(/))
   };
@@ -123,6 +123,7 @@ export default function(hljs) {
     "debug_assert!",
     "debug_assert_eq!",
     "env!",
+    "eprintln!",
     "panic!",
     "file!",
     "format!",

@@ -29,6 +29,7 @@ The table below shows the full list of languages (and corresponding classes/alia
 | AutoHotkey              | autohotkey             |         |
 | AutoIt                  | autoit                 |         |
 | Awk                     | awk, mawk, nawk, gawk  |         |
+| Ballerina               | ballerina, bal         | [highlightjs-ballerina](https://github.com/highlightjs/highlightjs-ballerina) |
 | Bash                    | bash, sh, zsh          |         |
 | Basic                   | basic                  |         |
 | BBCode                  | bbcode                 | [highlightjs-bbcode](https://github.com/RedGuy12/highlightjs-bbcode) |
@@ -187,6 +188,7 @@ The table below shows the full list of languages (and corresponding classes/alia
 | RenderMan RIB           | rib                    |         |
 | RenderMan RSL           | rsl                    |         |
 | RiScript                | risc, riscript         | [highlightjs-riscript](https://github.com/highlightjs/highlightjs-riscript) |
+| RISC-V Assembly         | riscv, riscvasm        | [highlightjs-riscvasm](https://github.com/highlightjs/highlightjs-riscvasm) |
 | Roboconf                | graph, instances       |         |
 | Robot Framework         | robot, rf              | [highlightjs-robot](https://github.com/highlightjs/highlightjs-robot) |
 | RPM spec files          | rpm-specfile, rpm, spec, rpm-spec, specfile | [highlightjs-rpm-specfile](https://github.com/highlightjs/highlightjs-rpm-specfile) |
@@ -236,8 +238,9 @@ The table below shows the full list of languages (and corresponding classes/alia
 | X#                      | xsharp, xs, prg        | [highlightjs-xsharp](https://github.com/InfomindsAg/highlightjs-xsharp) |
 | X++                     | axapta, x++            |         |
 | x86 Assembly            | x86asm                 |         |
+| x86 Assembly (AT&T)     | x86asmatt              | [highlightjs-x86asmatt](https://github.com/gondow/highlightjs-x86asmatt)  |
 | XL                      | xl, tao                |         |
-| XQuery                  | xquery, xpath, xq      |         |
+| XQuery                  | xquery, xpath, xq, xqm |         |
 | YAML                    | yml, yaml              |         |
 | ZenScript               | zenscript, zs          |[highlightjs-zenscript](https://github.com/highlightjs/highlightjs-zenscript) |
 | Zephir                  | zephir, zep            |         |
